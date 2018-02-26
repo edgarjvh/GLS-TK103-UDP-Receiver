@@ -101,7 +101,7 @@ Module Start
 
         If peticionDeCambio = 1 Then
 
-            Dim ipadd() As IPAddress = Dns.GetHostAddresses("gls.zuprevencion.org")
+            Dim ipadd() As IPAddress = Dns.GetHostAddresses("db.villasoftgps.com.ve")
 
             Return True
             Dim ip As Object = ipadd(0).ToString()
@@ -203,7 +203,7 @@ Module Start
                 contador += 1
             Else
                 Try
-                    ip = Dns.GetHostAddresses("gls.zuprevencion.org")
+                    ip = Dns.GetHostAddresses("db.villasoftgps.com.ve")
                     contador = 0
                 Catch ex As Exception
 
@@ -218,7 +218,7 @@ Module Start
         Try
             Console.WriteLine("CAPTURA INICIADA CORRECTAMENTE AL PUERTO " & My.Settings._port)
 
-            ip = Dns.GetHostAddresses("gls.zuprevencion.org")
+            ip = Dns.GetHostAddresses("db.villasoftgps.com.ve")
             Dim receiveBytes As Byte() = Nothing
             Dim strReturnData As String = ""
 
