@@ -8,7 +8,8 @@ Imports System.Timers
 
 Module Start
 #Region "VARIABLES GLOBALES"
-    Dim ip() As IPAddress
+    Dim glsIP() As IPAddress
+    Dim pcIP() As IPAddress
     Dim aTimer As Timers.Timer
     Dim receivingUdpClient As UdpClient
     Dim RemoteIpEndPoint As New IPEndPoint(IPAddress.Any, 0)
@@ -25,6 +26,26 @@ Module Start
     Dim trEvent As Thread
     Dim detenidoPorUsuario As Boolean = False
     Dim contador As Integer = 0
+    Private _isTransmittingPc As Boolean = False
+    Private _isTransmittingGls As Boolean = False
+
+    Public Property IsTransmittingPc() As Boolean
+        Get
+            Return _isTransmittingPc
+        End Get
+        Set(ByVal value As Boolean)
+            _isTransmittingPc = value
+        End Set
+    End Property
+    Public Property IsTransmittingGls() As Boolean
+        Get
+            Return _isTransmittingGls
+        End Get
+        Set(ByVal value As Boolean)
+            _isTransmittingGls = value
+        End Set
+    End Property
+
 #End Region
     Sub Main()
         Try
@@ -50,11 +71,17 @@ Module Start
 #Region "FUNCIONES Y RUTINAS"
     Sub setTitle()
         Try
-            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._ip & ":" & My.Settings._port & " :::>" &
+
+            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._ip & ":" & My.Settings._port & " :::> Transmisión: " &
+                            "Gls " & If(IsTransmittingGls, "ON", "OFF") & " - " &
+                            "Local " & If(IsTransmittingPc, "ON", "OFF") &
                             " REV. " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
         Catch ex As Exception
             'Console.WriteLine(ex.Message)
-            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._ip & ":" & My.Settings._port & " :::>"
+            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._ip & ":" & My.Settings._port & " :::> Transmisión: " &
+                            "Gls " & If(IsTransmittingGls, "ON", "OFF") & " - " &
+                            "Local " & If(IsTransmittingPc, "ON", "OFF") &
+                            " REV. "
         End Try
     End Sub
 
@@ -101,7 +128,7 @@ Module Start
 
         If peticionDeCambio = 1 Then
 
-            Dim ipadd() As IPAddress = Dns.GetHostAddresses("gls.zuprevencion.org")
+            Dim ipadd() As IPAddress = Dns.GetHostAddresses("gls.villasoftgps.com.ve")
 
             Return True
             Dim ip As Object = ipadd(0).ToString()
@@ -203,7 +230,8 @@ Module Start
                 contador += 1
             Else
                 Try
-                    ip = Dns.GetHostAddresses("gls.zuprevencion.org")
+                    glsIP = Dns.GetHostAddresses("gls.villasoftgps.com.ve")
+                    pcIP = Dns.GetHostAddresses("mipc.villasoftgps.com.ve")
                     contador = 0
                 Catch ex As Exception
 
@@ -218,16 +246,25 @@ Module Start
         Try
             Console.WriteLine("CAPTURA INICIADA CORRECTAMENTE AL PUERTO " & My.Settings._port)
 
-            ip = Dns.GetHostAddresses("gls.zuprevencion.org")
+            glsIP = Dns.GetHostAddresses("db.villasoftgps.com.ve")
+            pcIP = Dns.GetHostAddresses("mipc.villasoftgps.com.ve")
             Dim receiveBytes As Byte() = Nothing
             Dim strReturnData As String = ""
 
             While True
                 receiveBytes = receivingUdpClient.Receive(RemoteIpEndPoint)
 
-                Using sendingClient As New UdpClient(ip(0).ToString, 24000)
-                    sendingClient.Send(receiveBytes, receiveBytes.Length)
-                End Using
+                If IsTransmittingGls Then
+                    Using sendingClient As New UdpClient(glsIP(0).ToString, 24000)
+                        sendingClient.Send(receiveBytes, receiveBytes.Length)
+                    End Using
+                End If
+
+                If IsTransmittingPc Then
+                    Using sendingClient As New UdpClient(pcIP(0).ToString, 24000)
+                        sendingClient.Send(receiveBytes, receiveBytes.Length)
+                    End Using
+                End If
 
                 strReturnData = Encoding.ASCII.GetString(receiveBytes)
 
@@ -248,8 +285,6 @@ Module Start
             Console.WriteLine()
             detenerCaptura()
             iniciarCaptura()
-        Finally
-
         End Try
         Return True
     End Function
@@ -268,6 +303,12 @@ Module Start
                 Case "F4"
                     detenidoPorUsuario = True
                     detenerCaptura()
+                Case "F5"
+                    IsTransmittingGls = Not IsTransmittingGls
+                    setTitle()
+                Case "F6"
+                    IsTransmittingPc = Not IsTransmittingPc
+                    setTitle()
                 Case "F10"
                     iniciarCaptura()
                 Case "F11"
