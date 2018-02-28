@@ -15,10 +15,10 @@ Module Start
     Dim RemoteIpEndPoint As New IPEndPoint(IPAddress.Any, 0)
     Dim threadReceive As Thread
     Dim threadTeclas As Thread
-    Dim puertoEscucha As Integer = 18000
+    Dim puertoEscucha As Integer
     Dim ipEscucha As String = "172.87.221.236"
     Dim ipCorrecta As Boolean = True
-    Dim puertoCorrecto As Boolean = True
+    Dim puertoCorrecto As Boolean = False
     Dim trace As New Trace
     Dim vehicles As New List(Of Vehicle)
     Dim udpsender As UdpClient
