@@ -26,13 +26,19 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://server.villatracking.com:9000/</InstallUrl>
     <UpdateUrl>http://server.villatracking.com:9000/</UpdateUrl>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <SupportUrl>http://www.villatracking.com</SupportUrl>
+    <TargetCulture>es-VE</TargetCulture>
+    <ProductName>TK103 UDP Receiver</ProductName>
+    <PublisherName>Edgar Villasmil</PublisherName>
+    <SuiteName>Villa Soft Gps</SuiteName>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperEnabled>false</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

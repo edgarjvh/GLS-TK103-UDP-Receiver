@@ -71,14 +71,13 @@ Module Start
 #Region "FUNCIONES Y RUTINAS"
     Sub setTitle()
         Try
-
-            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._ip & ":" & My.Settings._port & " :::> Transmisión: " &
+            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._port & " :::> Transmisión: " &
                             "Gls " & If(IsTransmittingGls, "ON", "OFF") & " - " &
                             "Local " & If(IsTransmittingPc, "ON", "OFF") &
                             " REV. " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
         Catch ex As Exception
             'Console.WriteLine(ex.Message)
-            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._ip & ":" & My.Settings._port & " :::> Transmisión: " &
+            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._port & " :::> Transmisión: " &
                             "Gls " & If(IsTransmittingGls, "ON", "OFF") & " - " &
                             "Local " & If(IsTransmittingPc, "ON", "OFF") &
                             " REV. "
