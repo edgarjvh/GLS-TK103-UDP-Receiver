@@ -28,6 +28,7 @@ Module Start
     Dim contador As Integer = 0
     Private _isTransmittingPc As Boolean = False
     Private _isTransmittingGls As Boolean = False
+    Private _isTransmittingDemo As Boolean = False
 
     Public Property IsTransmittingPc() As Boolean
         Get
@@ -43,6 +44,14 @@ Module Start
         End Get
         Set(ByVal value As Boolean)
             _isTransmittingGls = value
+        End Set
+    End Property
+    Public Property IsTransmittingDemo() As Boolean
+        Get
+            Return _isTransmittingDemo
+        End Get
+        Set(ByVal value As Boolean)
+            _isTransmittingDemo = value
         End Set
     End Property
 
@@ -71,16 +80,18 @@ Module Start
 #Region "FUNCIONES Y RUTINAS"
     Sub setTitle()
         Try
-            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._port & " :::> Transmisión: " &
-                            "Gls " & If(IsTransmittingGls, "ON", "OFF") & " - " &
-                            "Local " & If(IsTransmittingPc, "ON", "OFF") &
-                            " REV. " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
+            Console.Title = "UDP TK103A | Puerto: " & My.Settings._port & " | " &
+                            "Demo: " & If(IsTransmittingDemo, "ON", "OFF") & " | " &
+                            "Gls " & If(IsTransmittingGls, "ON", "OFF") & " | " &
+                            "Local " & If(IsTransmittingPc, "ON", "OFF") & " | " &
+                            "REV. " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
         Catch ex As Exception
             'Console.WriteLine(ex.Message)
-            Console.Title = "<::: Capturador UDP TK103A - " & My.Settings._port & " :::> Transmisión: " &
-                            "Gls " & If(IsTransmittingGls, "ON", "OFF") & " - " &
-                            "Local " & If(IsTransmittingPc, "ON", "OFF") &
-                            " REV. "
+            Console.Title = "UDP TK103A | Puerto: " & My.Settings._port & " | " &
+                            "Demo: " & If(IsTransmittingDemo, "ON", "OFF") & " | " &
+                            "Gls " & If(IsTransmittingGls, "ON", "OFF") & " | " &
+                            "Local " & If(IsTransmittingPc, "ON", "OFF") & " | " &
+                            "REV. "
         End Try
     End Sub
 
@@ -270,7 +281,7 @@ Module Start
                 strReturnData = strReturnData.Replace("$", "")
 
                 ''ENVIAMOS LA TRAMA, LA IP Y EL PUERTO, A LA CLASE CORRESPONDIETE PARA SU TRATAMIENTO Y VALIDACION...
-                trace.transformTrace(strReturnData, RemoteIpEndPoint.Address.ToString, RemoteIpEndPoint.Port.ToString)
+                trace.transformTrace(strReturnData, RemoteIpEndPoint.Address.ToString, RemoteIpEndPoint.Port.ToString, IsTransmittingDemo)
 
                 'ESCRIBIMOS EN LA CONSOLA LA TRAMA RECIBIDA POR EL GPS...
                 Console.WriteLine(Now)
@@ -307,6 +318,9 @@ Module Start
                     setTitle()
                 Case "F6"
                     IsTransmittingPc = Not IsTransmittingPc
+                    setTitle()
+                Case "F7"
+                    IsTransmittingDemo = Not IsTransmittingDemo
                     setTitle()
                 Case "F10"
                     iniciarCaptura()

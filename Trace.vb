@@ -1,7 +1,7 @@
 ﻿Public Class Trace
     Dim db As New Db
 
-    Public Sub transformTrace(ByVal trace As String, ByVal ip As String, ByVal port As Integer)
+    Public Sub transformTrace(ByVal trace As String, ByVal ip As String, ByVal port As Integer, ByVal IsTransmittingDemo As Boolean)
         Try
             '==============================================================================================
             'TRAMA DE PRUEBA
@@ -38,7 +38,7 @@
                         End If
 
                         'ENVIAMOS LOS DATOS A LA CLASE QUE SE ENCARGARÁ DE ALMACENARLOS EN LA BASE DE DATOS...
-                        db.insertTrace(imei, event_name, date_time, latitude, longitude, speed, orientation, ip, port)
+                        db.insertTrace(imei, event_name, date_time, latitude, longitude, speed, orientation, ip, port, IsTransmittingDemo)
                     End If
                 End If
             End If
@@ -50,7 +50,7 @@
                                                   CStr(Now.Minute).Trim.PadLeft(2, "0") & ":" &
                                                   CStr(Now.Second).Trim.PadLeft(2, "0")
 
-            db.insertTrace(trace, ip, port, fechaHora)
+            db.insertTrace(trace, ip, port, fechaHora, IsTransmittingDemo)
         End Try
     End Sub
 
